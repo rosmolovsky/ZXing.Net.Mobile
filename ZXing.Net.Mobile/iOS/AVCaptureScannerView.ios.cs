@@ -91,15 +91,15 @@ namespace ZXing.Mobile
 				{ AVCaptureSession.PresetMedium, new CameraResolution    { Width = 480,  Height = 360 } }, //480x360
 				{ AVCaptureSession.Preset640x480, new CameraResolution   { Width = 640,  Height = 480 } },
 				{ AVCaptureSession.Preset1280x720, new CameraResolution  { Width = 1280, Height = 720 } },
-				{ AVCaptureSession.Preset1920x1080, new CameraResolution { Width = 1920, Height = 1080 } }
+				//{ AVCaptureSession.Preset1920x1080, new CameraResolution { Width = 1920, Height = 1080 } }
 			};
 
 			// configure the capture session for low resolution, change this if your code
 			// can cope with more data or volume
 			session = new AVCaptureSession()
 			{
-				SessionPreset = AVCaptureSession.Preset640x480
-			};
+				SessionPreset = AVCaptureSession.Preset1280x720
+            };
 
 			// create a device input and attach it to the session
 			//			var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType (AVMediaType.Video);
