@@ -58,7 +58,9 @@ namespace ZXing.Mobile.CameraAccess
 		public void RefreshCamera()
 			=> cameraController.RefreshCamera();
 
-		bool CanAnalyzeFrame
+        public CameraResolution CameraResolution => cameraController.CameraResolution;
+
+        bool CanAnalyzeFrame
 		{
 			get
 			{

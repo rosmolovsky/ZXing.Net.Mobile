@@ -129,8 +129,9 @@ namespace ZXing.Mobile
 		bool surfaceCreated;
 
 		public bool HasTorch => cameraAnalyzer.Torch.IsSupported;
+        public CameraResolution CameraResolution => cameraAnalyzer.CameraResolution;
 
-		protected override void OnAttachedToWindow()
+        protected override void OnAttachedToWindow()
 		{
 			base.OnAttachedToWindow();
 

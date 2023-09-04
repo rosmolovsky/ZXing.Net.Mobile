@@ -12,6 +12,7 @@ using Android.Widget;
 using ZXing.Mobile;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using Android.Hardware;
 
 [assembly: ExportRenderer(typeof(ZXingScannerView), typeof(ZXingScannerViewRenderer))]
 namespace ZXing.Net.Mobile.Forms.Android
@@ -74,9 +75,16 @@ namespace ZXing.Net.Mobile.Forms.Android
 				}
 
 				zxingSurface = new ZXingSurfaceView(Context as Activity, formsView.Options);
-				zxingSurface.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+                //zxingSurface.LayoutParameters = new LinearLayout.LayoutParams(100, 100);
+                
+				//zxingSurface.SetX(100);
+				//zxingSurface.SetY(100);
+                //zxingSurface.LayoutParameters = new ActionBar.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+				//zxingSurface.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
 				base.SetNativeControl(zxingSurface);
+
+				//this.AddView(zxingSurface);
 
 				if (formsView.IsScanning)
 					zxingSurface.StartScanning(formsView.RaiseScanResult, formsView.Options);
@@ -137,6 +145,54 @@ namespace ZXing.Net.Mobile.Forms.Android
 
 			return base.OnTouchEvent(e);
 		}
-	}
+
+        protected override void OnLayout(bool changed, int l, int t, int r, int b)
+        {
+            base.OnLayout(changed, l, t, r, b);
+
+            if (zxingSurface.CameraResolution != null)
+            {
+                var screenHeight = this.Height;
+				var screenWidth = this.Width;
+
+                var size = AdjustSize(zxingSurface.CameraResolution.Height, zxingSurface.CameraResolution.Width,
+                    screenWidth, screenHeight);
+
+				Control.Layout(0, 0, size.Width, size.Height);
+            }
+
+            //GetChildAt(0).Layout(100, 100, 100, 100);
+            //GetChildAt(0).Layout(0, 0, r - l, b - t);
+        }
+
+        private System.Drawing.Size AdjustSize(int previewWidth, int previewHeight, int targetWidth, int targetHeight)
+        {
+            var previewAspect = (double)previewWidth / previewHeight;
+            var targetAspect = (double)targetWidth / targetHeight;
+
+			int newWidth, newHeight;
+
+            if (previewAspect <= targetAspect)
+            {
+                newWidth = targetWidth;
+                newHeight = (int)(targetWidth / previewAspect);
+            }
+            else
+            {
+                newHeight = targetHeight;
+				newWidth = (int)(targetHeight * previewAspect);
+            }
+
+            return new System.Drawing.Size(newWidth, newHeight);
+        }
+
+        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
+            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
+
+			Control.Measure(widthMeasureSpec, heightMeasureSpec);
+            //GetChildAt(0).Measure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
 }
 
